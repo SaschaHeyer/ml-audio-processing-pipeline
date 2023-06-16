@@ -1,0 +1,46 @@
+
+main:
+    params: [event]
+    steps:
+    - log_event:
+            call: sys.log
+            args:
+                text: ${event}
+                severity: INFO
+    - extract_bucket_object:
+            assign:
+            - bucket: ${event.data.bucket}
+            - object: ${event.data.name}
+    - service_1:
+        call: http.post
+        args:
+            url: https://workflow-sevice-1-xgdxnb6fdq-uc.a.run.app
+            auth:
+                type: OIDC
+            body:
+                bucket: ${bucket} 
+                object: ${object} 
+        result: service_1_result
+    - service_2:
+        call: http.post
+        args:
+            url: https://workflow-sevice-2-xgdxnb6fdq-uc.a.run.app
+            auth:
+                type: OIDC
+            body:
+                audio_file: ${service_1_result.body.audio_file}
+        result: service_2_result
+    - service_3:
+        call: http.post
+        args:
+            url: https://workflow-sevice-3-xgdxnb6fdq-uc.a.run.app
+            auth:
+                type: OIDC
+            body:
+                audio_file: ${service_1_result.body.audio_file}
+                prediction: ${service_2_result.body.prediction}
+                spectogram_image: ${service_1_result.body.spectogram_image} 
+
+        result: service_3_result
+    - return_result:
+        return: ${service_3_result.body}

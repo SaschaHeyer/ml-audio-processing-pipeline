@@ -1,0 +1,1 @@
+curl -i -X POST -H "Content-Type: application/json" -d '{"bucket":"doit-workflow-poc", "object":"acdc.mp3"}' https://workflow-sevice-1-xgdxnb6fdq-uc.a.run.app
