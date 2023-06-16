@@ -83,7 +83,7 @@ rows_raw = query_job.result()
 rows = [dict(row) for row in rows_raw]
 
 
-st.subheader("Processed files")
+st.subheader("Processed files " + str(len(rows)))
 #st.text(rows)
 
 # Print results.

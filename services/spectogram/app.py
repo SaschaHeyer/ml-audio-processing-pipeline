@@ -1,5 +1,6 @@
 import json
 import logging
+import uuid
 import os
 import numpy as np
 import math
@@ -35,10 +36,14 @@ def handle_post():
     # download audio file
     bucket = storage_client.bucket(bucket_name)
     blob = bucket.blob(object_name)
-    blob.download_to_filename('temp.mp3')
+
+    filename = f"{uuid.uuid4()}.mp3"
+
+    # Now use this unique filename when saving/loading the file
+    blob.download_to_filename(filename)
 
     # Load the audio file
-    y, sr = librosa.load('temp.mp3')
+    y, sr = librosa.load(filename)
 
     # Create the spectrogram
     D = librosa.stft(y, n_fft=1024, hop_length=512)  # STFT of y
@@ -52,13 +57,14 @@ def handle_post():
     #blob = bucket.blob(os.path.splitext(object)[0] + '.npy')
 
     logging.error(spectogram_db.shape)
-    # generate spectogram image
-    plt.figure(figsize=(14, 5))
-    librosa.display.specshow(spectogram_db)
-    plt.colorbar(format='%+2.0f dB')
-    plt.title('Spectrogram')
-    plt.savefig('spectrogram.png')
-    plt.close()
+    if spectogram_db.size > 0 and not np.isnan(spectogram_db).all():
+        fig, ax = plt.subplots(figsize=(14, 5))
+        img = librosa.display.specshow(spectogram_db, ax=ax)
+        fig.colorbar(img, format='%+2.0f dB')
+        ax.set_title('Spectrogram')
+        fig.savefig('spectrogram.png')
+    else:
+        print("Invalid spectogram_db!")
 
     # save spectogram image to google cloud storage
     bucket = storage_client.bucket('doit-spectrograms')
