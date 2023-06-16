@@ -20,7 +20,6 @@ def handle_post():
     content = request.json
     print(content['bucket'])
     logging.info('service 1 called')
-    logging.error('WTF')
     logging.error(content)
 
     bucket_name = content['bucket']
@@ -52,13 +51,14 @@ def handle_post():
     #bucket = storage_client.bucket('doit-spectrograms')
     #blob = bucket.blob(os.path.splitext(object)[0] + '.npy')
 
-  
+    logging.error(spectogram_db.shape)
     # generate spectogram image
     plt.figure(figsize=(14, 5))
     librosa.display.specshow(spectogram_db)
     plt.colorbar(format='%+2.0f dB')
     plt.title('Spectrogram')
     plt.savefig('spectrogram.png')
+    plt.close()
 
     # save spectogram image to google cloud storage
     bucket = storage_client.bucket('doit-spectrograms')
