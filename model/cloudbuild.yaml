@@ -5,10 +5,10 @@ steps:
 #  id: 'download-model'
 # Build the container image
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/sascha-playground-doit/audio-classification', '.']
+  args: ['build', '-t', 'gcr.io/$PROJECT_ID/audio-classification', '.']
 #  waitFor: ['download-model']
 # Push the container image to Container Registry
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/sascha-playground-doit/audio-classification']
+  args: ['push', 'gcr.io/$PROJECT_ID/audio-classification']
 images:
-- gcr.io/sascha-playground-doit/audio-classification
+- gcr.io/$PROJECT_ID/audio-classification
