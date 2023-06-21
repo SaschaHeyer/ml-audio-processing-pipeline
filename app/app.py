@@ -9,7 +9,7 @@ from datetime import timedelta
 from google.cloud import storage
 import os
 
-
+PROJECT_ID = os.getenv('PROJECT_ID')
 
 st.set_page_config(layout="wide")
 
@@ -69,13 +69,13 @@ for uploaded_file in uploaded_files:
 #credentials = service_account.Credentials.from_service_account_info(
 #    st.secrets["gcp_service_account"]
 #)
-client = bigquery.Client().from_service_account_json('sascha-playground-doit-3a956997a20c.json')
-storage_client = storage.Client.from_service_account_json('sascha-playground-doit-3a956997a20c.json')
+client = bigquery.Client()
+storage_client = storage.Client()
 # Perform query.
 # Uses st.cache_data to only rerun when the query changes or after 10 min.
 #@st.cache_data(ttl=600)
 
-query = "SELECT * FROM `sascha-playground-doit.ml_audio_processing_workflow.processed`"
+query = "SELECT * FROM `" + PROJECT_ID + ".ml_audio_processing_workflow.processed`"
 
 query_job = client.query(query)
 rows_raw = query_job.result()
