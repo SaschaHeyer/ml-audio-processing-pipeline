@@ -1,7 +1,28 @@
-
 main:
     params: [event]
     steps:
+    - initialize:
+        assign:
+        - project: ${sys.get_env("GOOGLE_CLOUD_PROJECT_NUMBER")}
+        - zone: us-central1
+    - get_workflow_service_1:
+        call: googleapis.run.v1.namespaces.services.get
+        args:
+            name: ${"namespaces/" + project + "/services/workflow-sevice-1"}
+            location: ${zone}
+        result: workflow_service_1
+    - get_workflow_service_2:
+        call: googleapis.run.v1.namespaces.services.get
+        args:
+            name: ${"namespaces/" + project + "/services/workflow-sevice-2"}
+            location: ${zone}
+        result: workflow_service_2
+    - get_workflow_service_3:
+        call: googleapis.run.v1.namespaces.services.get
+        args:
+            name: ${"namespaces/" + project + "/services/workflow-sevice-3"}
+            location: ${zone}
+        result: workflow_service_3
     - log_event:
             call: sys.log
             args:
@@ -14,7 +35,7 @@ main:
     - service_1:
         call: http.post
         args:
-            url: https://workflow-sevice-1-xgdxnb6fdq-uc.a.run.app
+            url: ${workflow_service_1.status.url}
             auth:
                 type: OIDC
             body:
@@ -24,7 +45,7 @@ main:
     - service_2:
         call: http.post
         args:
-            url: https://workflow-sevice-2-xgdxnb6fdq-uc.a.run.app
+            url: ${workflow_service_2.status.url}
             auth:
                 type: OIDC
             body:
@@ -33,7 +54,7 @@ main:
     - service_3:
         call: http.post
         args:
-            url: https://workflow-sevice-3-xgdxnb6fdq-uc.a.run.app
+            url: ${workflow_service_3.status.url}
             auth:
                 type: OIDC
             body:
