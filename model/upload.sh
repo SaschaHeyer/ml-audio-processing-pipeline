@@ -1,4 +1,4 @@
-PROJECT_ID=(gcloud config get project_id)
+PROJECT_ID=$(gcloud config get project)
 
 gcloud ai models upload \
   --container-ports=8080 \
