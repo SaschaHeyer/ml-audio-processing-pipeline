@@ -58,7 +58,7 @@ for uploaded_file in uploaded_files:
         f.write(uploaded_file.getvalue())
 
     # upload to Google Cloud Storage
-    upload_blob(PROJECT_ID + "_worfklow_poc", uploaded_file.name, uploaded_file.name)
+    upload_blob(PROJECT_ID + "_workflow_poc", uploaded_file.name, uploaded_file.name)
 
     # remove the file
     os.remove(uploaded_file.name)
