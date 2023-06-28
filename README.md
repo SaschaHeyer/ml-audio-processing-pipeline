@@ -14,11 +14,11 @@
 
 ## Setup
 
-### Deploy services
-Each service has it's own subfolder containing a `deploy.sh` that runs a Cloud Build step. 
-
 ### Deploy model
 The model is a multi step process run in this order `build.sh`, `upload.sh`, `deploy.sh`
+
+### Deploy services
+Each service has it's own subfolder containing a `deploy.sh` that runs a Cloud Build step. 
 
 ### BigQuery
 The pipeline result is stored in BigQuery. 

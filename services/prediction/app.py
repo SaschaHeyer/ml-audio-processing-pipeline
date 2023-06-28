@@ -8,14 +8,18 @@ from flask import jsonify
 
 app = Flask(__name__)
 
+PROJECT_ID = os.getenv('PROJECT_ID')
+PROJECT_NUMBER = os.getenv('PROJECT_NUMBER')
+ENDPOINT_ID = os.getenv('ENDPOINT_ID')
+
 # TODO read this from the env variables
 aiplatform.init(
-    project='sascha-playground-doit',
+    project=PROJECT_ID,
     location='us-central1'
 )
 
 # TODO read this from the env variables
-endpoint = aiplatform.Endpoint("projects/234439745674/locations/us-central1/endpoints/3960172602411974656")
+endpoint = aiplatform.Endpoint("projects/{}/locations/us-central1/endpoints/{}".format(PROJECT_NUMBER, ENDPOINT_ID))
 
 
 

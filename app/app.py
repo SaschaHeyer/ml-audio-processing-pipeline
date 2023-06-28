@@ -1,6 +1,8 @@
 import streamlit as st
 from google.oauth2 import service_account
 from google.cloud import bigquery
+from google.auth import default, compute_engine
+from google.auth.transport import requests
 import streamlit as st
 import pandas as pd
 import json
@@ -10,6 +12,8 @@ from google.cloud import storage
 import os
 
 PROJECT_ID = os.getenv('PROJECT_ID')
+
+credentials, _ = default()
 
 st.set_page_config(layout="wide")
 
@@ -29,9 +33,19 @@ def generate_signed_url(image):
     bucket = storage_client.bucket(bucket_name)
     blob = bucket.blob(blob_name)
 
+    # then within your abstraction
+    auth_request = requests.Request()
+    credentials.refresh(auth_request)
+
+    signing_credentials = compute_engine.IDTokenCredentials(
+        auth_request,
+        "",
+        service_account_email=credentials.service_account_email
+    )
+
     # Generate a signed URL for the blob that lasts for 1 hour
     #url = blob.generate_signed_url(expiration=3600)
-    url = blob.generate_signed_url(timedelta(hours=1), method='GET')
+    url = blob.generate_signed_url(timedelta(hours=1), credentials=signing_credentials, method='GET')
 
     return url
 
@@ -75,7 +89,7 @@ storage_client = storage.Client()
 # Uses st.cache_data to only rerun when the query changes or after 10 min.
 #@st.cache_data(ttl=600)
 
-query = "SELECT * FROM `" + PROJECT_ID + ".ml_audio_processing_workflow.processed`"
+query = "SELECT * FROM `{}.ml_audio_processing_workflow.processed`".format(PROJECT_ID)
 
 query_job = client.query(query)
 rows_raw = query_job.result()

@@ -16,6 +16,8 @@ app = Flask(__name__)
 
 storage_client = storage.Client()
 
+PROJECT_ID = os.getenv('PROJECT_ID')
+
 @app.route('/', methods=['POST'])
 def handle_post():
     content = request.json
@@ -36,12 +38,14 @@ def handle_post():
     # download audio file
     bucket = storage_client.bucket(bucket_name)
     blob = bucket.blob(object_name)
+    logging.error("download succeeded")
 
     filename = f"{uuid.uuid4()}.mp3"
 
     # Now use this unique filename when saving/loading the file
     blob.download_to_filename(filename)
 
+    logging.error("download succeeded2")
     # Load the audio file
     y, sr = librosa.load(filename)
 
@@ -67,11 +71,12 @@ def handle_post():
         print("Invalid spectogram_db!")
 
     # save spectogram image to google cloud storage
-    bucket = storage_client.bucket('doit-spectrograms')
+    spectogram_bucket_name = "{}_workflow_poc_spectogram".format(PROJECT_ID)
+    bucket = storage_client.bucket(spectogram_bucket_name)
     blob = bucket.blob(os.path.splitext(object_name)[0] + '.png')
     blob.upload_from_filename('spectrogram.png')
-    spectogram_image = "gs://{}/{}".format('doit-spectrograms', os.path.splitext(object_name)[0] + '.png')
-    
+    spectogram_image = "gs://{}/{}".format(spectogram_bucket_name, os.path.splitext(object_name)[0] + '.png')
+    print(spectogram_image)
     return jsonify({
       "spectogram_image": spectogram_image,
       "audio_file": "gs://{}/{}".format(bucket_name, object_name)

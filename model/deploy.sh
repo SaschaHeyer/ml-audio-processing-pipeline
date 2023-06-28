@@ -28,7 +28,6 @@ else
 	  --project=$PROJECT_ID \
 	  --region=us-central1 \
 	  --model=$MODEL_ID \
-	  --traffic-split=0=100 \
 	  --machine-type="n1-standard-16" \
 	  --accelerator=type="nvidia-tesla-t4,count=1" \
 	  --display-name=image-audio-classification\
