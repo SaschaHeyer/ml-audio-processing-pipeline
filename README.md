@@ -10,16 +10,15 @@
 2. Enable the following APIs:	*(list is probably not exhaustive)*
    ```
    gcloud services enable eventarc.googleapis.com \
-    eventarcpublishing.googleapis.com \
-    workflows.googleapis.com \
-    workflowexecutions.googleapis.com \
-    aiplatform.googleapis.com \
-    run.googleapis.com \
-    cloudbuild.googleapis.com \
-    artifactregistry.googleapis.com \
-    bigquery.googleapis.com \
-    storage.googleapis.com
-    
+      eventarcpublishing.googleapis.com \
+      workflows.googleapis.com \
+      workflowexecutions.googleapis.com \
+      aiplatform.googleapis.com \
+      run.googleapis.com \
+      cloudbuild.googleapis.com \
+      artifactregistry.googleapis.com \
+      bigquery.googleapis.com \
+      storage.googleapis.com
    ```
 3. Create a workflow-poc service account:
    ```
