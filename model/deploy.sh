@@ -1,3 +1,5 @@
+gcloud config set accessibility/screen_reader false
+
 PROJECT_ID=$(gcloud config get project)
 
 ENDPOINT_ID=$(gcloud ai endpoints list --project=$PROJECT_ID --region=us-central1 | grep 'workflow-poc-endpoint' | awk '{print $1}')
