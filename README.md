@@ -18,7 +18,8 @@
       cloudbuild.googleapis.com \
       artifactregistry.googleapis.com \
       bigquery.googleapis.com \
-      storage.googleapis.com
+      storage.googleapis.com \
+      ml.googleapis.com
    ```
 3. Create a workflow-poc service account:
    ```
@@ -56,7 +57,7 @@
     --repository-format=docker \
     --location=us
    ```
-7. Authenticate Cloud Build with Coud Run (https://cloud.google.com/build/docs/securing-builds/configure-access-for-cloud-build-service-account#service-account-permissions-settings)
+7. Authenticate Cloud Build with Cloud Run (https://cloud.google.com/build/docs/securing-builds/configure-access-for-cloud-build-service-account#service-account-permissions-settings)
 
 ## Setup
 
@@ -74,7 +75,7 @@ Create table with schema:
 ````
 bq mk ml_audio_processing_workflow
 
-!bq mk --table \
+bq mk --table \
 --description "Table contains the outpt of the ml audio processing workflow" \
 --schema "audio_file:STRING,spectogram_image:STRING,prediction:STRING" \
 ml_audio_processing_workflow.processed
