@@ -27,11 +27,11 @@
     --description="Workflow POC Service Account" \
     --display-name="Workflow POC"
    ```
-4. Add the follwoing roles to you Workflow POC service account (we're using it for everything, so it's a bunch of roles) (HOWTO: https://cloud.google.com/iam/docs/grant-role-console):
+4. Add the following roles to you Workflow POC service account (we're using it for everything, so it's a bunch of roles) (HOWTO: https://cloud.google.com/iam/docs/grant-role-console):
    
    ![image](https://github.com/SaschaHeyer/ml-audio-processing-pipeline/assets/89016113/1db2a344-e708-41f8-a57a-bfde05f7713c)
 
-5. We need to enable some service agents to act as our workflow-poc service account (the PROJECT_NUMBER runs for a while in case of DOIT organisation, as we have a bunch of projects):
+5. We need to enable some service agents to act as our workflow-poc service account:
    ```
    PROJECT_ID=$(gcloud config get project)
    PROJECT_NUMBER=$(gcloud projects list --filter=$PROJECT_ID --format="value(PROJECT_NUMBER)")
@@ -57,7 +57,7 @@
     --repository-format=docker \
     --location=us
    ```
-7. Authenticate Cloud Build with Cloud Run (https://cloud.google.com/build/docs/securing-builds/configure-access-for-cloud-build-service-account#service-account-permissions-settings)
+7. Authorize Cloud Build to act as a Cloud Run Admin: https://cloud.google.com/build/docs/securing-builds/configure-access-for-cloud-build-service-account#service-account-permissions-settings.
 
 ## Setup
 
@@ -65,7 +65,7 @@
 The model is a multi step process run in this order `model/build.sh`, `model/upload.sh`, `model/deploy.sh`
 
 ### Deploy services
-Each service has it's own subfolder containing a `deploy.sh` that runs a Cloud Build step. 
+Each service has its own subfolder containing a `deploy.sh` that runs a Cloud Build step. 
 
 ### BigQuery
 The pipeline result is stored in BigQuery. 
@@ -82,7 +82,7 @@ ml_audio_processing_workflow.processed
 ````
 
 ### UI
-The demo ui can be deployed with `app/deploy.sh`
+The demo UI can be deployed with `app/deploy.sh`
 
 ### Workflow
 Finally, run the `deploy.sh` to deploy the Workflow and Eventarc triggerer
